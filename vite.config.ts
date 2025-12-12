@@ -1,5 +1,5 @@
 /* Vite config for building the frontend react app: https://vite.dev/config/ */
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
@@ -8,9 +8,6 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: '::',
     port: 8080,
-  },
-  experimental: {
-    enableNativePlugin: true
   },
   build: {
     minify: mode !== 'development',
@@ -23,6 +20,7 @@ export default defineConfig(({ mode }) => ({
         warn(warning)
       },
     },
+    chunkSizeWarningLimit: 600,
   },
   plugins: [react()],
   define: {
@@ -32,5 +30,8 @@ export default defineConfig(({ mode }) => ({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+  },
+  optimizeDeps: {
+    include: ['zod', '@hookform/resolvers'],
   },
 }))

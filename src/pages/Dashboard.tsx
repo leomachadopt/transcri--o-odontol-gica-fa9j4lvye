@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useAuthStore } from '@/stores/authStore'
 import { useTranscriptionStore } from '@/stores/transcriptionStore'
 import { Link } from 'react-router-dom'
@@ -16,7 +17,13 @@ import { ptBR } from 'date-fns/locale'
 
 export default function Dashboard() {
   const { user } = useAuthStore()
-  const { getUserTranscriptions } = useTranscriptionStore()
+  const { getUserTranscriptions, fetchTranscriptions, isLoading } = useTranscriptionStore()
+
+  useEffect(() => {
+    if (user) {
+      fetchTranscriptions()
+    }
+  }, [user, fetchTranscriptions])
 
   const transcriptions = user ? getUserTranscriptions(user.id) : []
   const recentTranscriptions = transcriptions.slice(0, 3)

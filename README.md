@@ -1,9 +1,10 @@
-# Projeto Criado com o Skip
+# Sistema de Transcrição Odontológica
 
-Este projeto foi criado de ponta a ponta com o [Skip](https://goskip.dev).
+Sistema completo de transcrição de áudio com autenticação e armazenamento em banco de dados PostgreSQL (Neon).
 
 ## 🚀 Stack Tecnológica
 
+### Frontend
 - **React 19** - Biblioteca JavaScript para construção de interfaces
 - **Vite** - Build tool extremamente rápida
 - **TypeScript** - Superset tipado do JavaScript
@@ -12,31 +13,101 @@ Este projeto foi criado de ponta a ponta com o [Skip](https://goskip.dev).
 - **React Router** - Roteamento para aplicações React
 - **React Hook Form** - Gerenciamento de formulários performático
 - **Zod** - Validação de schemas TypeScript-first
-- **Recharts** - Biblioteca de gráficos para React
+- **Zustand** - Gerenciamento de estado
+
+### Backend
+- **Node.js** - Runtime JavaScript
+- **Express** - Framework web para Node.js
+- **PostgreSQL** - Banco de dados relacional (Neon)
+- **bcryptjs** - Hash de senhas
+- **jsonwebtoken** - Autenticação JWT
+- **pg** - Cliente PostgreSQL para Node.js
 
 ## 📋 Pré-requisitos
 
 - Node.js 18+
-- npm
+- npm ou pnpm
+- Conta no Neon (banco de dados PostgreSQL) ou PostgreSQL local
 
 ## 🔧 Instalação
 
 ```bash
+# Instalar dependências
 npm install
+# ou
+pnpm install
 ```
+
+## ⚙️ Configuração
+
+### 1. Configurar Variáveis de Ambiente
+
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+
+```env
+# Database
+DATABASE_URL=postgresql://usuario:senha@host:porta/database?sslmode=require
+
+# JWT Secret (altere em produção!)
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+
+# Server
+PORT=3001
+
+# Frontend URL (para CORS)
+FRONTEND_URL=http://localhost:5173
+```
+
+**Nota:** O arquivo `.env` já está configurado com a string de conexão do Neon fornecida.
+
+### 2. Criar Tabelas no Banco de Dados
+
+Execute o script de migração para criar todas as tabelas necessárias:
+
+```bash
+npm run db:migrate
+```
+
+Este comando criará as seguintes tabelas:
+- `users` - Armazena informações dos usuários
+- `transcriptions` - Armazena as transcrições de áudio
 
 ## 💻 Scripts Disponíveis
 
 ### Desenvolvimento
 
 ```bash
-# Iniciar servidor de desenvolvimento
+# Iniciar servidor frontend (Vite)
 npm start
 # ou
 npm run dev
+
+# Iniciar servidor backend (Express)
+npm run server
+# ou em modo watch (reload automático)
+npm run server:dev
 ```
 
-Abre a aplicação em modo de desenvolvimento em [http://localhost:5173](http://localhost:5173).
+**Importante:** Você precisa executar o frontend e o backend simultaneamente em terminais separados:
+
+1. Terminal 1 - Backend:
+```bash
+npm run server:dev
+```
+
+2. Terminal 2 - Frontend:
+```bash
+npm start
+```
+
+O frontend estará disponível em [http://localhost:5173](http://localhost:5173) e o backend em [http://localhost:3001](http://localhost:3001).
+
+### Banco de Dados
+
+```bash
+# Executar migração (criar tabelas)
+npm run db:migrate
+```
 
 ### Build
 
@@ -76,11 +147,29 @@ npm run format
 
 ```
 .
-├── src/              # Código fonte da aplicação
-├── public/           # Arquivos estáticos
-├── dist/             # Build de produção (gerado)
-├── node_modules/     # Dependências (gerado)
-└── package.json      # Configurações e dependências do projeto
+├── src/                      # Código fonte do frontend
+│   ├── components/          # Componentes React
+│   │   ├── auth/           # Componentes de autenticação
+│   │   └── ui/             # Componentes UI (Shadcn)
+│   ├── pages/              # Páginas da aplicação
+│   ├── stores/             # Stores Zustand
+│   ├── lib/                # Utilitários e API client
+│   └── hooks/              # React hooks customizados
+├── server/                  # Código fonte do backend
+│   ├── config/             # Configurações (banco de dados)
+│   ├── routes/             # Rotas da API
+│   │   ├── auth.js        # Rotas de autenticação
+│   │   └── transcriptions.js # Rotas de transcrições
+│   ├── middleware/         # Middlewares (autenticação)
+│   ├── scripts/            # Scripts utilitários
+│   │   ├── migrate.js     # Script de migração
+│   │   └── schema.sql      # Schema do banco de dados
+│   └── index.js            # Servidor Express principal
+├── public/                  # Arquivos estáticos
+├── dist/                    # Build de produção (gerado)
+├── node_modules/            # Dependências (gerado)
+├── .env                     # Variáveis de ambiente (não versionado)
+└── package.json            # Configurações e dependências
 ```
 
 ## 🎨 Componentes UI
@@ -114,12 +203,39 @@ Este template inclui uma biblioteca completa de componentes Shadcn UI baseados e
 ## 🔄 Workflow de Desenvolvimento
 
 1. Instale as dependências: `npm install`
-2. Inicie o servidor de desenvolvimento: `npm start`
-3. Faça suas alterações
-4. Verifique o código: `npm run lint`
-5. Formate o código: `npm run format`
-6. Crie a build: `npm run build`
-7. Visualize a build: `npm run preview`
+2. Configure o arquivo `.env` com suas credenciais do banco de dados
+3. Execute a migração: `npm run db:migrate`
+4. Inicie o servidor backend: `npm run server:dev` (Terminal 1)
+5. Inicie o servidor frontend: `npm start` (Terminal 2)
+6. Faça suas alterações
+7. Verifique o código: `npm run lint`
+8. Formate o código: `npm run format`
+9. Crie a build: `npm run build`
+10. Visualize a build: `npm run preview`
+
+## 🔐 Sistema de Autenticação
+
+O sistema utiliza JWT (JSON Web Tokens) para autenticação:
+- Tokens são armazenados no `localStorage` do navegador
+- Tokens expiram em 7 dias
+- Senhas são hasheadas com bcrypt antes de serem armazenadas
+- Todas as rotas de transcrições requerem autenticação
+
+## 📊 API Endpoints
+
+### Autenticação
+- `POST /api/auth/register` - Registrar novo usuário
+- `POST /api/auth/login` - Fazer login
+- `GET /api/auth/me` - Verificar token e obter dados do usuário
+
+### Transcrições
+- `GET /api/transcriptions` - Listar todas as transcrições do usuário
+- `GET /api/transcriptions/:id` - Obter transcrição específica
+- `POST /api/transcriptions` - Criar nova transcrição
+- `PUT /api/transcriptions/:id` - Atualizar transcrição
+- `DELETE /api/transcriptions/:id` - Deletar transcrição
+
+Todas as rotas de transcrições requerem autenticação via header `Authorization: Bearer <token>`.
 
 ## 📦 Build e Deploy
 

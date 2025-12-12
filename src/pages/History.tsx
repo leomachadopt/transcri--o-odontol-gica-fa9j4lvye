@@ -40,12 +40,18 @@ import { cn } from '@/lib/utils'
 
 export default function History() {
   const { user } = useAuthStore()
-  const { getUserTranscriptions, deleteTranscription } = useTranscriptionStore()
+  const { getUserTranscriptions, deleteTranscription, fetchTranscriptions, isLoading } = useTranscriptionStore()
   const [searchTerm, setSearchTerm] = useState('')
   const [expandedId, setExpandedId] = useState<string | null>(null)
 
   const location = useLocation()
   const highlightId = location.state?.highlightId as string | undefined
+
+  useEffect(() => {
+    if (user) {
+      fetchTranscriptions()
+    }
+  }, [user, fetchTranscriptions])
 
   const transcriptions = useMemo(() => {
     return user ? getUserTranscriptions(user.id) : []
@@ -76,10 +82,14 @@ export default function History() {
     }
   }, [highlightId])
 
-  const handleDelete = (id: string) => {
-    deleteTranscription(id)
-    toast.success('Transcrição excluída com sucesso!')
-    if (expandedId === id) setExpandedId(null)
+  const handleDelete = async (id: string) => {
+    const success = await deleteTranscription(id)
+    if (success) {
+      toast.success('Transcrição excluída com sucesso!')
+      if (expandedId === id) setExpandedId(null)
+    } else {
+      toast.error('Erro ao excluir transcrição. Tente novamente.')
+    }
   }
 
   const handleCopy = async (text: string) => {

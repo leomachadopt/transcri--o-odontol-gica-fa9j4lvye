@@ -37,18 +37,16 @@ export function LoginForm() {
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     setIsLoading(true)
-    // Simulate network delay for better UX
-    await new Promise((resolve) => setTimeout(resolve, 500))
 
-    const success = loginWithCredentials(values.email, values.password)
+    const success = await loginWithCredentials(values.email, values.password)
 
     if (success) {
       toast.success('Bem-vindo(a) de volta!')
       navigate('/dashboard')
     } else {
       toast.error('Email ou senha incorretos.')
-      setIsLoading(false)
     }
+    setIsLoading(false)
   }
 
   return (

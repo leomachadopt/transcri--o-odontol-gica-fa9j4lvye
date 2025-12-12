@@ -45,21 +45,25 @@ export default function Transcription() {
     }
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!user) return
     if (!localTranscript.trim()) {
       toast.error('Não é possível salvar uma transcrição vazia.')
       return
     }
 
-    addTranscription({
+    const success = await addTranscription({
       userId: user.id,
       text: localTranscript,
       timestamp: Date.now(),
     })
 
-    toast.success('Transcrição salva com sucesso!')
-    navigate('/history')
+    if (success) {
+      toast.success('Transcrição salva com sucesso!')
+      navigate('/history')
+    } else {
+      toast.error('Erro ao salvar transcrição. Tente novamente.')
+    }
   }
 
   const handleClear = () => {

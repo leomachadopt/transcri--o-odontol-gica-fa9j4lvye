@@ -23,9 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-# Evaluation screenshots
-screenshot.png
-.eslintcache
-
 # Environment variables
-.env*
+.env
+.env.local
+.env.production

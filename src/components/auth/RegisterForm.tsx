@@ -48,15 +48,8 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
 
   const onSubmit = async (values: z.infer<typeof signupSchema>) => {
     setIsLoading(true)
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 800))
 
-    const success = register({
-      id: crypto.randomUUID(),
-      name: values.name,
-      email: values.email,
-      password: values.password,
-    })
+    const success = await register(values.name, values.email, values.password)
 
     setIsLoading(false)
 
