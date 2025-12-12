@@ -81,10 +81,63 @@ export const authAPI = {
   },
 
   async getMe() {
-    const data = await request<{ user: { id: string; name: string; email: string } }>(
+    const data = await request<{ user: { id: string; name: string; email: string; role?: 'user' | 'admin' } }>(
       '/auth/me'
     )
     return data
+  },
+}
+
+// API de Administração
+export const adminAPI = {
+  async getUsers(search?: string, page = 1, limit = 20) {
+    const params = new URLSearchParams()
+    if (search) params.append('search', search)
+    params.append('page', page.toString())
+    params.append('limit', limit.toString())
+    
+    const data = await request<{ 
+      users: Array<{ id: string; name: string; email: string; role: 'user' | 'admin'; created_at: string }>
+      pagination: { page: number; limit: number; total: number; totalPages: number }
+    }>(
+      `/admin/users?${params.toString()}`
+    )
+    return data
+  },
+
+  async getUserById(id: string) {
+    const data = await request<{ user: { id: string; name: string; email: string; role: 'user' | 'admin'; created_at: string } }>(
+      `/admin/users/${id}`
+    )
+    return data
+  },
+
+  async createUser(name: string, email: string, password: string, role: 'user' | 'admin' = 'user') {
+    const data = await request<{ message: string; user: { id: string; name: string; email: string; role: 'user' | 'admin' } }>(
+      '/admin/users',
+      {
+        method: 'POST',
+        body: JSON.stringify({ name, email, password, role }),
+      }
+    )
+    return data
+  },
+
+  async updateUser(id: string, updates: { name?: string; email?: string; password?: string; role?: 'user' | 'admin' }) {
+    const data = await request<{ message: string; user: { id: string; name: string; email: string; role: 'user' | 'admin' } }>(
+      `/admin/users/${id}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(updates),
+      }
+    )
+    return data
+  },
+
+  async deleteUser(id: string) {
+    await request(`/admin/users/${id}`, {
+      method: 'DELETE',
+    })
   },
 }
 

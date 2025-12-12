@@ -7,9 +7,11 @@ import Index from './pages/Index'
 import Dashboard from './pages/Dashboard'
 import Transcription from './pages/Transcription'
 import History from './pages/History'
+import Admin from './pages/Admin'
 import NotFound from './pages/NotFound'
 import Layout from './components/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { AdminRoute } from './components/AdminRoute'
 
 // ONLY IMPORT AND RENDER WORKING PAGES, NEVER ADD PLACEHOLDER COMPONENTS OR PAGES IN THIS FILE
 // AVOID REMOVING ANY CONTEXT PROVIDERS FROM THIS FILE (e.g. TooltipProvider, Toaster, Sonner)
@@ -31,6 +33,11 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/transcription" element={<Transcription />} />
             <Route path="/history" element={<History />} />
+          </Route>
+
+          {/* Admin Routes */}
+          <Route element={<AdminRoute />}>
+            <Route path="/admin" element={<Admin />} />
           </Route>
 
           {/* ADD ALL CUSTOM ROUTES MUST BE ADDED HERE */}

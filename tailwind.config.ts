@@ -27,8 +27,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter var', 'SF Pro Display', 'system-ui', 'sans-serif'],
-        display: ['SF Pro Display', 'Inter var', 'system-ui', 'sans-serif'],
+        sans: ['Jost', 'Poppins', 'system-ui', 'sans-serif'],
+        display: ['Poppins', 'Jost', 'system-ui', 'sans-serif'],
+        body: ['Jost', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: 'hsl(var(--border))',

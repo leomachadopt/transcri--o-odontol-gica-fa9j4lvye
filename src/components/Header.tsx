@@ -15,7 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { Menu, User, LogOut, History, Mic, LayoutDashboard } from 'lucide-react'
+import { Menu, User, LogOut, History, Mic, LayoutDashboard, Shield } from 'lucide-react'
 
 export function Header() {
   const { user, isAuthenticated, logout } = useAuthStore()
@@ -29,48 +29,66 @@ export function Header() {
   }
 
   const UserAvatar = () => (
-    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-700 font-semibold text-sm">
-      {user?.name ? user.name.charAt(0).toUpperCase() : <User size={16} />}
+    <div className="flex items-center justify-center w-10 h-10 rounded-full gradient-primary text-white font-semibold text-sm shadow-modern hover:shadow-modern-lg transition-all duration-300">
+      {user?.name ? user.name.charAt(0).toUpperCase() : <User size={18} />}
     </div>
   )
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
-      <div className="container flex h-16 items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 glass-effect shadow-modern">
+      <div className="container flex h-20 items-center justify-between">
         <Link
           to={isAuthenticated ? '/dashboard' : '/'}
-          className="flex items-center gap-2"
+          className="flex items-center gap-3 group transition-all duration-300"
         >
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
-            <Mic size={18} />
+          <div className="relative w-12 h-12 gradient-primary rounded-2xl flex items-center justify-center text-white shadow-modern group-hover:shadow-modern-lg transition-all duration-300 animate-float">
+            <Mic size={22} className="group-hover:scale-110 transition-transform duration-300" />
+            <div className="absolute inset-0 rounded-2xl bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </div>
-          <span className="text-xl font-bold text-foreground hidden sm:inline-block">
-            Transcrições Dentárias
-          </span>
+          <div className="hidden sm:flex flex-col">
+            <span className="text-xl font-bold text-foreground font-display tracking-tight">
+              Transcrições Dentárias
+            </span>
+            <span className="text-xs text-muted-foreground font-light tracking-wide">
+              Clínica Integrada
+            </span>
+          </div>
         </Link>
 
         {isAuthenticated && (
           <>
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
+            <nav className="hidden md:flex items-center gap-2 text-sm font-medium">
               <Link
                 to="/dashboard"
-                className="hover:text-primary transition-colors flex items-center gap-2"
+                className="px-4 py-2 rounded-xl hover:bg-primary/5 hover:text-primary transition-all duration-300 flex items-center gap-2 text-muted-foreground"
               >
-                <LayoutDashboard size={16} /> Dashboard
+                <LayoutDashboard size={18} />
+                <span className="font-medium">Dashboard</span>
               </Link>
               <Link
                 to="/transcription"
-                className="hover:text-primary transition-colors flex items-center gap-2"
+                className="px-4 py-2 rounded-xl hover:bg-primary/5 hover:text-primary transition-all duration-300 flex items-center gap-2 text-muted-foreground"
               >
-                <Mic size={16} /> Nova Transcrição
+                <Mic size={18} />
+                <span className="font-medium">Nova Transcrição</span>
               </Link>
               <Link
                 to="/history"
-                className="hover:text-primary transition-colors flex items-center gap-2"
+                className="px-4 py-2 rounded-xl hover:bg-primary/5 hover:text-primary transition-all duration-300 flex items-center gap-2 text-muted-foreground"
               >
-                <History size={16} /> Histórico
+                <History size={18} />
+                <span className="font-medium">Histórico</span>
               </Link>
+              {user?.role === 'admin' && (
+                <Link
+                  to="/admin"
+                  className="px-4 py-2 rounded-xl hover:bg-primary/5 hover:text-primary transition-all duration-300 flex items-center gap-2 text-muted-foreground"
+                >
+                  <Shield size={18} />
+                  <span className="font-medium">Admin</span>
+                </Link>
+              )}
             </nav>
 
             <div className="flex items-center gap-4">
@@ -147,6 +165,15 @@ export function Header() {
                       >
                         <History size={20} /> Histórico
                       </Link>
+                      {user?.role === 'admin' && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center gap-2 text-lg font-medium hover:text-primary"
+                        >
+                          <Shield size={20} /> Administração
+                        </Link>
+                      )}
                       <Button
                         variant="destructive"
                         className="mt-4 w-full justify-start"

@@ -31,7 +31,7 @@ export default async function handler(req, res) {
 
     // Buscar dados atualizados do usuário
     const result = await pool.query(
-      'SELECT id, name, email, created_at FROM users WHERE id = $1',
+      'SELECT id, name, email, role, created_at FROM users WHERE id = $1',
       [decoded.id]
     )
 
