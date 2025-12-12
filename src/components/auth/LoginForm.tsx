@@ -24,7 +24,7 @@ const loginSchema = z.object({
 
 export function LoginForm() {
   const navigate = useNavigate()
-  const { loginWithCredentials } = useAuthStore()
+  const { loginWithCredentials, error } = useAuthStore()
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -44,7 +44,8 @@ export function LoginForm() {
       toast.success('Bem-vindo(a) de volta!')
       navigate('/dashboard')
     } else {
-      toast.error('Email ou senha incorretos.')
+      const errorMessage = error || 'Email ou senha incorretos.'
+      toast.error(errorMessage)
     }
     setIsLoading(false)
   }

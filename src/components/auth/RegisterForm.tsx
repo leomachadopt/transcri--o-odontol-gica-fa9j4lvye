@@ -33,7 +33,7 @@ interface RegisterFormProps {
 }
 
 export function RegisterForm({ onSuccess }: RegisterFormProps) {
-  const { register } = useAuthStore()
+  const { register, error } = useAuthStore()
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof signupSchema>>({
@@ -58,7 +58,9 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
       form.reset()
       onSuccess()
     } else {
-      toast.error('Este email já está cadastrado.')
+      // Mostrar mensagem de erro específica do store
+      const errorMessage = error || 'Erro ao criar conta. Tente novamente.'
+      toast.error(errorMessage)
     }
   }
 

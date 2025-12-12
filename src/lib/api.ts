@@ -16,17 +16,44 @@ async function request<T>(
     headers['Authorization'] = `Bearer ${token}`
   }
 
-  const response = await fetch(`${API_URL}${endpoint}`, {
-    ...options,
-    headers,
-  })
+  try {
+    const response = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      headers,
+    })
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Erro desconhecido' }))
-    throw new Error(error.error || `Erro HTTP: ${response.status}`)
+    if (!response.ok) {
+      // Tentar obter mensagem de erro do servidor
+      let errorMessage = `Erro HTTP: ${response.status}`
+      try {
+        const errorData = await response.json()
+        errorMessage = errorData.error || errorMessage
+      } catch {
+        // Se não conseguir parsear JSON, usar mensagem padrão baseada no status
+        if (response.status === 0 || response.status >= 500) {
+          errorMessage = 'Servidor não disponível. Verifique se o backend está rodando.'
+        } else if (response.status === 404) {
+          errorMessage = 'Endpoint não encontrado. Verifique a URL da API.'
+        } else if (response.status === 401 || response.status === 403) {
+          errorMessage = 'Não autorizado. Faça login novamente.'
+        } else if (response.status === 409) {
+          errorMessage = 'Este email já está cadastrado.'
+        }
+      }
+      throw new Error(errorMessage)
+    }
+
+    return response.json()
+  } catch (error) {
+    // Capturar erros de rede (CORS, conexão, etc)
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      throw new Error(
+        `Não foi possível conectar ao servidor. Verifique se o backend está rodando em ${API_URL.replace('/api', '')}`
+      )
+    }
+    // Re-lançar outros erros
+    throw error
   }
-
-  return response.json()
 }
 
 // API de Autenticação
