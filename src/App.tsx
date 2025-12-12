@@ -4,8 +4,12 @@ import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import Index from './pages/Index'
+import Dashboard from './pages/Dashboard'
+import Transcription from './pages/Transcription'
+import History from './pages/History'
 import NotFound from './pages/NotFound'
 import Layout from './components/Layout'
+import { ProtectedRoute } from './components/ProtectedRoute'
 
 // ONLY IMPORT AND RENDER WORKING PAGES, NEVER ADD PLACEHOLDER COMPONENTS OR PAGES IN THIS FILE
 // AVOID REMOVING ANY CONTEXT PROVIDERS FROM THIS FILE (e.g. TooltipProvider, Toaster, Sonner)
@@ -16,10 +20,19 @@ const App = () => (
   >
     <TooltipProvider>
       <Toaster />
-      <Sonner />
+      <Sonner position="top-right" richColors closeButton />
       <Routes>
         <Route element={<Layout />}>
+          {/* Public Route */}
           <Route path="/" element={<Index />} />
+
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/transcription" element={<Transcription />} />
+            <Route path="/history" element={<History />} />
+          </Route>
+
           {/* ADD ALL CUSTOM ROUTES MUST BE ADDED HERE */}
         </Route>
         <Route path="*" element={<NotFound />} />
