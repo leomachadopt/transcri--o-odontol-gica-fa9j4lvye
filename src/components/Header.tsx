@@ -41,8 +41,12 @@ export function Header() {
           to={isAuthenticated ? '/dashboard' : '/'}
           className="flex items-center gap-3 group transition-all duration-300"
         >
-          <div className="relative w-12 h-12 gradient-primary rounded-2xl flex items-center justify-center text-white shadow-modern group-hover:shadow-modern-lg transition-all duration-300 animate-float">
-            <Mic size={22} className="group-hover:scale-110 transition-transform duration-300" />
+          <div className="relative w-12 h-12 rounded-2xl flex items-center justify-center shadow-modern group-hover:shadow-modern-lg transition-all duration-300 animate-float overflow-hidden bg-white">
+            <img 
+              src="/logo.png" 
+              alt="Logo Clínica Integrada Cristiane Martins Kids & Family" 
+              className="w-full h-full object-contain p-1 group-hover:scale-110 transition-transform duration-300"
+            />
             <div className="absolute inset-0 rounded-2xl bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </div>
           <div className="hidden sm:flex flex-col">

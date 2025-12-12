@@ -81,8 +81,12 @@ export default function Index() {
             <div className="absolute top-0 left-0 right-0 h-1 gradient-primary"></div>
 
             <CardHeader className="text-center space-y-4 pt-8">
-              <div className="mx-auto w-20 h-20 gradient-primary rounded-3xl flex items-center justify-center mb-2 shadow-modern-lg animate-float relative">
-                <Mic className="text-white h-10 w-10" />
+              <div className="mx-auto w-20 h-20 rounded-3xl flex items-center justify-center mb-2 shadow-modern-lg animate-float relative overflow-hidden bg-white">
+                <img 
+                  src="/logo.png" 
+                  alt="Logo Clínica Integrada Cristiane Martins Kids & Family" 
+                  className="w-full h-full object-contain p-2"
+                />
                 <div className="absolute inset-0 rounded-3xl bg-white/10"></div>
               </div>
               <CardTitle className="text-3xl font-bold text-foreground font-display">
