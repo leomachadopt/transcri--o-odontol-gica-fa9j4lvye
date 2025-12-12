@@ -8,9 +8,9 @@ export function Footer() {
       <div className="container py-8">
         <div className="flex flex-col items-center justify-center gap-4 text-center">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span className="font-medium">Transcrições Dentárias</span>
+            <span className="font-medium">Transcrições de Evoluções</span>
             <span>•</span>
-            <span className="font-light">Clínica Integrada</span>
+            <span className="font-light">Clínica Integrada Cristiane Martins Kids & Family</span>
           </div>
 
           <div className="flex items-center gap-2 text-sm text-muted-foreground">

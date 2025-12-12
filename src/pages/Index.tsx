@@ -33,9 +33,9 @@ export default function Index() {
                 <span>Tecnologia de ponta em transcrição</span>
               </div>
               <h1 className="text-5xl font-bold text-foreground font-display tracking-tight leading-tight">
-                Transcrições Dentárias
+                Transcrições de Evoluções
                 <span className="block text-3xl mt-2 text-muted-foreground font-normal">
-                  Clínica Integrada
+                  Clínica Integrada Cristiane Martins Kids & Family
                 </span>
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
@@ -90,7 +90,7 @@ export default function Index() {
               </CardTitle>
               <CardDescription className="text-base">
                 {isLogin
-                  ? 'Acesse suas transcrições dentárias'
+                  ? 'Acesse suas transcrições de evoluções'
                   : 'Comece a transcrever seus áudios hoje'}
               </CardDescription>
             </CardHeader>

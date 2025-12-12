@@ -47,10 +47,10 @@ export function Header() {
           </div>
           <div className="hidden sm:flex flex-col">
             <span className="text-xl font-bold text-foreground font-display tracking-tight">
-              Transcrições Dentárias
+              Transcrições de Evoluções
             </span>
             <span className="text-xs text-muted-foreground font-light tracking-wide">
-              Clínica Integrada
+              Clínica Integrada Cristiane Martins Kids & Family
             </span>
           </div>
         </Link>
